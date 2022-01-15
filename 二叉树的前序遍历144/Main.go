@@ -3,8 +3,7 @@ package main
 import "fmt"
 
 /**
-递归方式
-先根节点，再左子树，右子树
+根节点--左子树--右子树
 */
 
 type TreeNode struct {
@@ -13,6 +12,9 @@ type TreeNode struct {
 	Right *TreeNode
 }
 
+/**
+递归方式
+*/
 func preorderTraversal(root *TreeNode) (vals []int) {
 	var preorder func(*TreeNode)
 	preorder = func(node *TreeNode) {
@@ -24,6 +26,24 @@ func preorderTraversal(root *TreeNode) (vals []int) {
 		preorder(node.Right)
 	}
 	preorder(root)
+	return
+}
+
+/**
+迭代方式
+*/
+func preorderTraversal_b(root *TreeNode) (vals []int) {
+	stack := []*TreeNode{}
+	node := root
+	for node != nil || len(stack) > 0 {
+		for node != nil {
+			vals = append(vals, node.Val)
+			stack = append(stack, node) //入栈
+			node = node.Left
+		}
+		node = stack[len(stack)-1].Right
+		stack = stack[:len(stack)-1] //碰到右节点出栈
+	}
 	return
 }
 
@@ -41,6 +61,7 @@ func main() {
 	n2.Right = n5
 	n3.Left = n6
 	n3.Right = n7
-	result := preorderTraversal(n1)
+	//result := preorderTraversal(n1)
+	result := preorderTraversal_b(n1)
 	fmt.Println(result)
 }
