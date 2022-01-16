@@ -47,6 +47,32 @@ func preorderTraversal_b(root *TreeNode) (vals []int) {
 	return
 }
 
+/**
+morris前序方式遍历
+*/
+func preorderTraversal_c(root *TreeNode) (vals []int) {
+	var p1, p2 *TreeNode = root, nil
+	for p1 != nil {
+		p2 = p1.Left
+		if p2 != nil {
+			for p2.Right != nil && p2.Right != p1 {
+				p2 = p2.Right
+			}
+			if p2.Right == nil {
+				vals = append(vals, p1.Val)
+				p2.Right = p1
+				p1 = p1.Left
+				continue
+			}
+			p2.Right = nil
+		} else {
+			vals = append(vals, p1.Val)
+		}
+		p1 = p1.Right
+	}
+	return
+}
+
 func main() {
 	n1 := &TreeNode{Val: 1, Left: nil, Right: nil}
 	n2 := &TreeNode{Val: 2, Left: nil, Right: nil}
@@ -62,6 +88,7 @@ func main() {
 	n3.Left = n6
 	n3.Right = n7
 	//result := preorderTraversal(n1)
-	result := preorderTraversal_b(n1)
+	//result := preorderTraversal_b(n1)
+	result := preorderTraversal_c(n1)
 	fmt.Println(result)
 }
